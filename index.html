@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ckb" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>یاری زیندەوەر و نازیندەوەر</title>
+<style>
+:root{--bg:#f4f1e8;--card:#fff;--ink:#2b2a26;--g:#2e7d32;--n:#546e7a;--ok:#2e7d32;--bad:#c62828;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1f211c;--card:#2b2e27;--ink:#f1eee4;--ok:#81c784;--bad:#ef9a9a}}
+:root[data-theme="dark"]{--bg:#1f211c;--card:#2b2e27;--ink:#f1eee4;--ok:#81c784;--bad:#ef9a9a}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Naskh Arabic","Noto Sans Arabic",Tahoma,"Segoe UI",Arial,sans-serif;text-align:center;padding:12px;max-width:480px;margin-inline:auto}
+h1{font-size:1.25rem;margin:8px 0}
+.tabs{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.tabs button{border:2px solid var(--g);background:var(--card);color:var(--ink);border-radius:20px;padding:8px 14px;font:inherit;cursor:pointer}
+.tabs button.on{background:var(--g);color:#fff}
+.box{background:var(--card);border-radius:16px;padding:16px;margin:8px 0}
+.prog{opacity:.75;font-size:.95rem}
+.q{font-weight:bold;margin:6px 0}
+.em{font-size:5rem;line-height:1.2}
+.nm{font-size:1.5rem;font-weight:bold}
+.nm.big{font-size:1.3rem;padding:18px 4px}
+#btns{display:flex;gap:10px;margin-top:14px}
+#btns button{flex:1;border:0;border-radius:14px;padding:16px 6px;font:inherit;font-size:1.1rem;color:#fff;cursor:pointer}
+#bl{background:var(--g)}#bn{background:var(--n)}
+#fb{min-height:3em;margin-top:12px;font-weight:bold}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.go{border:0;background:var(--g);color:#fff;border-radius:20px;padding:10px 22px;font:inherit;cursor:pointer;margin-top:10px}
+#study{display:none;text-align:start}
+#study h2{font-size:1.1rem;margin:4px 0 8px}
+#study ul{margin:0 0 12px;padding-inline-start:22px;line-height:1.9}
+.l h2{color:var(--ok)}
+.note{background:rgba(84,110,122,.15);border-radius:12px;padding:10px;font-size:.95rem}
+</style>
+</head>
+<body>
+<h1>🌿 یاری زیندەوەر و نازیندەوەر</h1>
+<div><button class="act" id="snd" style="margin:4px 0">🔊 دەنگ</button></div>
+<div class="tabs" id="tabs"></div>
+<div id="game">
+ <div class="box">
+  <div class="prog" id="prog"></div>
+  <div class="q" id="q"></div>
+  <div id="item"></div>
+  <div id="btns"><button id="bl">🌱 زیندەوەر</button><button id="bn">🪨 نازیندەوەر</button></div>
+  <div id="fb"></div>
+  <button class="go" id="nx" style="display:none"></button>
+ </div>
+</div>
+<div id="study">
+ <div class="box l"><h2>🌱 زیندەوەر</h2><ul>
+  <li>گەشە دەکات</li><li>هەناسە دەدات</li><li>خۆراک و ئاوی پێویستە</li><li>زاوزێ دەکات</li><li>وەڵامی گۆڕانی ژینگە دەداتەوە</li><li>کۆتایی دێت و دەمرێت</li></ul></div>
+ <div class="box"><h2>🪨 نازیندەوەر</h2><ul>
+  <li>گەشە ناکات</li><li>هەناسە نادات</li><li>خۆراکی ناوێت</li><li>زاوزێ ناکات</li><li>هەست بە ژینگە ناکات</li><li>هەرگیز گیانی نەبووە</li></ul></div>
+ <div class="note">💡 جووڵە تەنها تایبەتمەندی زیندەوەر نییە: ئۆتۆمبێل و هەور دەجووڵێن، بەڵام زیندەوەر نین.</div>
+</div>
+<script>
+var I=[
+["🐱","پشیلە",1,"پشیلە زیندەوەرە؛ گەشە دەکات، هەناسە دەدات و خۆراکی پێویستە."],
+["🌳","دار",1,"دار زیندەوەرە؛ گەشە دەکات و ئاو و خۆری پێویستە."],
+["🐟","ماسی",1,"ماسی زیندەوەرە؛ لە ئاودا هەناسە دەدات و زاوزێ دەکات."],
+["🌻","گوڵ",1,"گوڵ زیندەوەرە؛ گەشە دەکات و تۆو دروست دەکات."],
+["🐦","باڵندە",1,"باڵندە زیندەوەرە؛ هێلکە دەکات و گەشە دەکات."],
+["🧑","مرۆڤ",1,"مرۆڤ زیندەوەرە؛ هەناسە دەدات، گەشە دەکات و زاوزێ دەکات."],
+["🐰","کەروێشک",1,"کەروێشک زیندەوەرە؛ خۆراک دەخوات و گەشە دەکات."],
+["🍄","قارچک",1,"قارچک زیندەوەرە؛ گەشە دەکات و زاوزێ دەکات."],
+["🪨","بەرد",0,"بەرد نازیندەوەرە؛ گەشە ناکات و هەناسە نادات."],
+["💧","ئاو",0,"ئاو نازیندەوەرە؛ خۆراکی ناوێت و زاوزێ ناکات."],
+["☁️","هەور",0,"هەور نازیندەوەرە؛ تەنها بە با دەجووڵێت و گەشە ناکات."],
+["🚗","ئۆتۆمبێل",0,"ئۆتۆمبێل دەجووڵێت، بەڵام نازیندەوەرە؛ هەناسە نادات و گەشە ناکات."],
+["🪑","کورسی",0,"کورسی نازیندەوەرە؛ هەناسە نادات و گەشە ناکات."],
+["⚽","تۆپ",0,"تۆپ نازیندەوەرە؛ تەنها کاتێک دەجووڵێت کە کەسێک لێی بدات."],
+["☀️","خۆر",0,"خۆر نازیندەوەرە؛ ڕووناکی و گەرمی دەدات، بەڵام گەشە ناکات و زاوزێ ناکات."],
+["📖","کتێب",0,"کتێب نازیندەوەرە؛ هەناسە نادات و خۆراکی ناوێت."]];
+var Q=[["گەشە دەکات",1],["هەناسە دەدات",1],["خۆراک و ئاوی پێویستە",1],["زاوزێ دەکات",1],["وەڵامی گۆڕانی ژینگە دەداتەوە",1],["کۆتایی دێت و دەمرێت",1],
+["گەشە ناکات",0],["هەناسە نادات",0],["خۆراکی ناوێت",0],["زاوزێ ناکات",0],["هەست بە ژینگە ناکات",0],["هەرگیز گیانی نەبووە",0]];
+var T=["ڕیزکردن","تایبەتمەندییەکان","کارتی فێربوون"],mode=0,list=[],i=0,sc=0;
+function $(id){return document.getElementById(id)}
+function shuf(a){return a.slice().sort(function(){return Math.random()-.5})}
+var tabs=$("tabs");
+T.forEach(function(t,k){var b=document.createElement("button");b.textContent=t;b.onclick=function(){go(k)};tabs.appendChild(b)});
+function go(m){
+ mode=m;Array.prototype.forEach.call(tabs.children,function(b,k){b.className=k===m?"on":""});
+ $("game").style.display=m===2?"none":"block";$("study").style.display=m===2?"block":"none";
+ if(m<2)start();
+}
+function start(){list=shuf(mode===0?I:Q);i=0;sc=0;draw()}
+function info(it){return mode===0?{l:it[2],r:it[3]}:{l:it[1],r:"ئەمە تایبەتمەندی "+(it[1]?"زیندەوەرە.":"نازیندەوەرە.")}}
+function draw(){
+ if(i>=list.length){return result()}
+ var it=list[i];
+ $("prog").textContent="پرسیاری "+(i+1)+" / "+list.length;
+ $("q").textContent=mode===0?"ئەمە زیندەوەرە یان نازیندەوەر؟":"ئەم تایبەتمەندییە بۆ کامیانە؟";
+ $("item").innerHTML=mode===0?'<div class="em">'+it[0]+'</div><div class="nm">'+it[1]+'</div>':'<div class="nm big">'+it[0]+'</div>';
+ $("fb").innerHTML="";$("nx").style.display="none";$("btns").style.display="flex";
+ $("nx").onclick=function(){i++;draw()};
+}
+function ans(v){
+ var f=info(list[i]),ok=(v===f.l);if(ok)sc++;(ok?SND.ok:SND.bad)();
+ $("fb").innerHTML=(ok?'<span class="ok">✅ ڕاستە!</span> ':'<span class="bad">❌ هەڵەیە.</span> ')+f.r;
+ $("btns").style.display="none";
+ $("nx").textContent=i===list.length-1?"بینینی ئەنجام":"دواتر";$("nx").style.display="inline-block";
+}
+function result(){
+ var p=sc/list.length;
+ $("prog").textContent="";$("q").textContent="";
+ $("item").innerHTML='<div class="em">'+(p>=.8?"🏆":"💪")+'</div><div class="nm">ئەنجامت: '+sc+' لە '+list.length+'</div>';
+ $("fb").textContent=p>=.8?"🎉 ئافەرین! زۆر باش بوو":"دووبارە هەوڵبدەرەوە، دەتوانیت باشتر بکەیت";
+ (p>=.8?SND.win:SND.swap)();$("btns").style.display="none";$("nx").textContent="دووبارە یاری بکە";$("nx").style.display="inline-block";$("nx").onclick=start;
+}
+$("bl").onclick=function(){ans(1)};$("bn").onclick=function(){ans(0)};
+
+var AC=null,snd=true;
+function ctx(){try{if(!AC){var C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC&&AC.state==="suspended")AC.resume()}catch(e){}return AC}
+function tone(f,t,d,ty,v){var a=ctx();if(!a||!snd)return;try{var o=a.createOscillator(),g=a.createGain(),s=a.currentTime+t;o.type=ty||"sine";o.frequency.value=f;g.gain.setValueAtTime(0.0001,s);g.gain.exponentialRampToValueAtTime(v||0.2,s+0.02);g.gain.exponentialRampToValueAtTime(0.0001,s+d);o.connect(g);g.connect(a.destination);o.start(s);o.stop(s+d+0.05)}catch(e){}}
+var SND={tap:function(){tone(520,0,.08,"triangle",.15)},swap:function(){tone(440,0,.07,"triangle",.18);tone(660,.07,.09,"triangle",.18)},ok:function(){tone(523,0,.12,"sine",.2);tone(659,.1,.12,"sine",.2);tone(784,.2,.22,"sine",.2)},bad:function(){tone(220,0,.25,"sawtooth",.1);tone(165,.15,.3,"sawtooth",.1)},win:function(){[523,659,784,1047,784,1047].forEach(function(f,i){tone(f,i*.13,.24,"triangle",.22)})}};
+function say(t){if(!snd)return;try{var u=new SpeechSynthesisUtterance(String(t).toLowerCase());u.lang="en-US";u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+var sb=document.getElementById("snd");sb.onclick=function(){snd=!snd;sb.textContent=snd?"🔊 دەنگ":"🔇 بێدەنگ";if(snd)SND.tap()};
+go(0);
+</script>
+</body>
+</html>
